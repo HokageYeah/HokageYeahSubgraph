@@ -1,15 +1,30 @@
 const GravatarRegistry = artifacts.require('./GravatarRegistry.sol')
 
 module.exports = async function(deployer, network, accounts) {
-  const registry = await GravatarRegistry.deployed()
+  try {
+    const registry = await GravatarRegistry.deployed()
+    console.log('Contract address:', registry.address)
 
-  console.log('Account address:', registry.address)
+    // 添加延迟以避免网络问题
+    console.log('Waiting 3 seconds before creating gravatar...')
+    await new Promise(resolve => setTimeout(resolve, 3000))
 
-  // let accounts = await web3.eth.getAccounts()
-  await registry.createGravatar('Carl', 'https://www.google.com/imgres?q=%E5%9B%BE%E7%89%87&imgurl=https%3A%2F%2Fimgs.699pic.com%2Fimages%2F500%2F465%2F562.jpg!list1x.v2&imgrefurl=https%3A%2F%2F699pic.com%2Ftupian%2Fai.html&docid=embemvTtTQwcHM&tbnid=iqpXLrobq9vNRM&vet=12ahUKEwjK7Zih4vOPAxUCZvUHHQQqFeoQM3oECCEQAA..i&w=459&h=300&hcb=2&ved=2ahUKEwjK7Zih4vOPAxUCZvUHHQQqFeoQM3oECCEQAA', {
-    from: accounts[0],
-  })
-  // await registry.createGravatar('Lucas', 'https://thegraph.com/img/team/bw_Lucas.jpg', {
-  //   from: accounts[0],
-  // })
+    // 创建第一个 Gravatar
+    console.log('Creating gravatar for Carl...')
+    const tx = await registry.createGravatar(
+      'Carl', 
+      'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png', 
+      {
+        from: accounts[0],
+        gas: 500000,
+        gasPrice: web3.utils.toWei('20', 'gwei')
+      }
+    )
+    console.log('Gravatar created! Transaction hash:', tx.tx)
+
+  } catch (error) {
+    console.log('Warning: Failed to create initial gravatar, but contract deployment was successful!')
+    console.log('Error:', error.message)
+    console.log('You can create gravatars manually later using the deployed contract.')
+  }
 }

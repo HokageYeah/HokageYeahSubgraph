@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: GravatarRegistry
-    network: mainnet
+    network: sepolia
     source:
       address: "0x4922A1aDfd81C28B25bfa4A2419FF7e025F37FC4"
       abi: GravatarRegistry
-      startBlock: 0
+      startBlock: 9276459
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
